@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Public
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tictactoe.model.Difficulty
@@ -109,7 +108,7 @@ fun MainMenuScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             MenuOptionCard(
-                icon = Icons.Default.Public,
+                icon = Icons.Default.Share,
                 title = "Online Multiplayer",
                 subtitle = "Host or Join via 6-digit room code",
                 accentColor = NeonPink,
@@ -119,7 +118,7 @@ fun MainMenuScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             MenuOptionCard(
-                icon = Icons.Default.Group,
+                icon = Icons.Default.PlayArrow,
                 title = "Pass & Play",
                 subtitle = "Two players on one device",
                 accentColor = TextLight,

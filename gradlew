@@ -1,9 +1,7 @@
 #!/bin/sh
 
 # Attempt to set APP_HOME
-# Resolve links: $0 may be a link
 PRG="$0"
-# Need this for relative symlinks.
 while [ -h "$PRG" ] ; do
     ls=`ls -ld "$PRG"`
     link=`expr "$ls" : '.*-> \(.*\)$'`
@@ -21,10 +19,7 @@ cd "$SAVED" >/dev/null
 APP_NAME="Gradle"
 APP_BASE_NAME=`basename "$0"`
 
-# Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
-
-# Use the maximum available, or set MAX_FD != -1 to use that value.
 MAX_FD="maximum"
 
 warn () {
@@ -38,25 +33,32 @@ die () {
     exit 1
 }
 
-# OS specific support (both for verifying environment and setting flags)
 darwin=false
 cygwin=false
 msys=false
 case "`uname`" in
-  DARWIN* )
-    darwin=true
-    ;;
-  CYGWIN* )
-    cygwin=true
-    ;;
-  MSYS* | MINGW* )
-    msys=true
-    ;;
+  DARWIN* ) darwin=true ;;
+  CYGWIN* ) cygwin=true ;;
+  MSYS* | MINGW* ) msys=true ;;
 esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
-# Determine the Java command to use to start the JVM.
+# Auto-bootstrap wrapper jar if missing
+if [ ! -f "$CLASSPATH" ]; then
+    mkdir -p "$APP_HOME/gradle/wrapper"
+    if command -v gradle >/dev/null 2>&1; then
+        echo "gradle-wrapper.jar is missing: generating with installed gradle..."
+        (cd "$APP_HOME" && gradle wrapper --quiet)
+    elif command -v curl >/dev/null 2>&1; then
+        echo "gradle-wrapper.jar is missing: downloading official wrapper..."
+        curl -sLo "$CLASSPATH" "https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradle/wrapper/gradle-wrapper.jar"
+    elif command -v wget >/dev/null 2>&1; then
+        echo "gradle-wrapper.jar is missing: downloading official wrapper..."
+        wget -q -O "$CLASSPATH" "https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradle/wrapper/gradle-wrapper.jar"
+    fi
+fi
+
 if [ -n "$JAVA_HOME" ] ; then
     if [ -x "$JAVA_HOME/jre/sh/java" ] ; then
         JAVACMD="$JAVA_HOME/jre/sh/java"
@@ -71,7 +73,6 @@ else
     which java >/dev/null 2>&1 || die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH."
 fi
 
-# Increase the maximum file descriptors if possible.
 if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
     MAX_FD_LIMIT=`ulimit -H -n`
     if [ $? -eq 0 ] ; then
@@ -87,7 +88,6 @@ if [ "$cygwin" = "false" -a "$darwin" = "false" -a "$nonstop" = "false" ] ; then
     fi
 fi
 
-# Split up the JVM_OPTS By default
 eval set -- $DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS "\"-Dorg.gradle.appname=$APP_BASE_NAME\"" -classpath "\"$CLASSPATH\"" org.gradle.wrapper.GradleWrapperMain "$@"
 
 exec "$JAVACMD" "$@"

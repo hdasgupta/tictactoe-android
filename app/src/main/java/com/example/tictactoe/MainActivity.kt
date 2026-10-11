@@ -3,7 +3,6 @@ package com.example.tictactoe
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -13,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tictactoe.model.GameStatus
 import com.example.tictactoe.ui.screens.GameOverDialog
 import com.example.tictactoe.ui.screens.GameScreen
@@ -24,8 +24,6 @@ import com.example.tictactoe.viewmodel.TicTacToeViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: TicTacToeViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -34,7 +32,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = DarkBackground
                 ) {
-                    TicTacToeApp(viewModel)
+                    val vm: TicTacToeViewModel = viewModel()
+                    TicTacToeApp(vm)
                 }
             }
         }

@@ -16,12 +16,10 @@ if "%DIRNAME%" == "" set DIRNAME=.
 set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
 
-@rem Resolve any "." and ".." in APP_HOME to make it shorter.
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
-@rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
 
 set JAVA_EXE=java.exe
@@ -45,16 +43,16 @@ echo.
 goto fail
 
 :execute
-@rem Setup the command line
-
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 
-@rem Execute Gradle
+if not exist "%CLASSPATH%" (
+    echo gradle-wrapper.jar not found, downloading...
+    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object Net.WebClient).DownloadFile('https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradle/wrapper/gradle-wrapper.jar', '%CLASSPATH%')"
+)
+
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
 
 :fail
-rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
-rem the _cmd.exe /c_ return code!
 if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
 exit /b 1
 

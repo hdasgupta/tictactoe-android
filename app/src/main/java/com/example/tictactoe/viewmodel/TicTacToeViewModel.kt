@@ -9,6 +9,7 @@ import com.example.tictactoe.model.GameMode
 import com.example.tictactoe.model.GameStatus
 import com.example.tictactoe.model.Player
 import com.example.tictactoe.model.Score
+import com.example.tictactoe.model.WinningLine
 import com.example.tictactoe.online.OnlineGameService
 import com.example.tictactoe.online.SimulatedOnlineService
 import kotlinx.coroutines.Job
@@ -37,8 +38,10 @@ data class UiState(
 )
 
 class TicTacToeViewModel(
-    val onlineService: OnlineGameService = SimulatedOnlineService()
+    val onlineService: OnlineGameService
 ) : ViewModel() {
+
+    constructor() : this(SimulatedOnlineService())
 
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -170,7 +173,7 @@ class TicTacToeViewModel(
 
     private fun triggerAiMove() {
         viewModelScope.launch {
-            delay(500) // Realistic bot think time
+            delay(500)
             val board = _uiState.value.board
             val aiSymbol = _uiState.value.humanPlayer.opponent()
             val aiMove = aiPlayer.calculateMove(board, _uiState.value.difficulty)
@@ -201,7 +204,6 @@ class TicTacToeViewModel(
                 delay(1000)
                 _uiState.update { it.copy(turnTimerSeconds = it.turnTimerSeconds - 1) }
             }
-            // Timer expired -> auto forfeit or pass turn
             handleTimerExpired()
         }
     }

@@ -1,10 +1,7 @@
 package com.example.tictactoe.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -13,8 +10,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,13 +31,23 @@ fun GameOverDialog(
     onRematch: () -> Unit,
     onBackToMenu: () -> Unit
 ) {
-    val (title, color, message) = when (gameStatus) {
+    if (gameStatus !is GameStatus.Won && gameStatus !is GameStatus.Draw) return
+
+    val title: String
+    val color: Color
+    val message: String
+
+    when (gameStatus) {
         is GameStatus.Won -> {
             val winnerSymbol = gameStatus.winner.symbol
-            Triple("$winnerSymbol Won!", if (gameStatus.winner == Player.X) NeonBlue else NeonPink, "Great match!")
+            title = "$winnerSymbol Won!"
+            color = if (gameStatus.winner == Player.X) NeonBlue else NeonPink
+            message = "Great match!"
         }
         is GameStatus.Draw -> {
-            Triple("It's a Draw!", AccentGold, "Well played by both sides.")
+            title = "It's a Draw!"
+            color = AccentGold
+            message = "Well played by both sides."
         }
         else -> return
     }
